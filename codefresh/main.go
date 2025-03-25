@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -30,20 +29,20 @@ func main() {
 	pipelines = lo.Filter(pipelines, func(p rest.Pipeline, index int) bool {
 		envName, _ := strings.CutPrefix(p.Metadata.Name, "hsm-api/deployment-api-")
 		env := Environment(envName)
-		return env.IsValid() && env.IsProduction()
+		return env.IsValid() && env.IsProduction() && !env.IsMajor()
 	})
 	for _, p := range pipelines {
-		log.Print("- ", p.Metadata.Name)
-		buildId, err := pipeAPI.Run(p.Metadata.Name, &rest.RunOptions{
-			Variables: map[string]string{
-				"GIT_REVISION": tag,
-				"TAG":          tag,
-			},
-		})
-		if err != nil {
-			log.Panic("Failed to list pipelines: ", err)
-		}
-		link := fmt.Sprintf("%s/build/%s", host, buildId)
-		log.Print("Build link: ", link)
+		// buildId, err := pipeAPI.Run(p.Metadata.Name, &rest.RunOptions{
+		// 	Variables: map[string]string{
+		// 		"GIT_REVISION": tag,
+		// 		"TAG":          tag,
+		// 	},
+		// })
+		// if err != nil {
+		// 	log.Panic("Failed to list pipelines: ", err)
+		// }
+		// link := fmt.Sprintf("%s/build/%s", host, buildId)
+		link := "dont"
+		log.Printf("Started %s: %s", p.Metadata.Name, link)
 	}
 }

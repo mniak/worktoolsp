@@ -23,7 +23,8 @@ const (
 )
 
 func (e Environment) NonPCI() string {
-	return string(e)
+	nosuffix, _ := strings.CutSuffix(string(e), "-pci")
+	return nosuffix
 }
 
 func (e Environment) PCI() string {
@@ -33,18 +34,18 @@ func (e Environment) PCI() string {
 	return string(e) + "-pci"
 }
 
-func (e Environment) IsMinor() bool {
-	switch e {
-	case Prod, Itau, India:
-		return false
-	default:
+func (e Environment) IsMajor() bool {
+	switch e.NonPCI() {
+	case string(Prod), string(Itau), string(India):
 		return true
+	default:
+		return false
 	}
 }
 
 func (e Environment) IsProduction() bool {
-	switch e {
-	case EXT:
+	switch e.NonPCI() {
+	case string(EXT):
 		return false
 	default:
 		return true
@@ -52,8 +53,8 @@ func (e Environment) IsProduction() bool {
 }
 
 func (e Environment) IsValid() bool {
-	nosuf, _ := strings.CutSuffix(string(e), "-pci")
-	return slices.Contains(ProductionEnvironments(), Environment(nosuf))
+	nosuffix, _ := strings.CutSuffix(string(e), "-pci")
+	return slices.Contains(ProductionEnvironments(), Environment(nosuffix))
 }
 
 func AllEnvironments() []Environment {
@@ -74,17 +75,5 @@ func AllEnvironments() []Environment {
 func ProductionEnvironments() []Environment {
 	return lo.Filter(AllEnvironments(), func(e Environment, _ int) bool {
 		return e.IsProduction()
-	})
-}
-
-func MinorProductionEnvironments() []Environment {
-	return lo.Filter(ProductionEnvironments(), func(e Environment, _ int) bool {
-		return e.IsMinor()
-	})
-}
-
-func MajorProductionEnvironments() []Environment {
-	return lo.Filter(ProductionEnvironments(), func(e Environment, _ int) bool {
-		return !e.IsMinor()
 	})
 }
