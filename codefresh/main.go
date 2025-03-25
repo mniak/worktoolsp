@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -10,7 +11,10 @@ import (
 )
 
 func main() {
-	host := "https://g.codefresh.io"
+	const host = "https://g.codefresh.io"
+	const tag = "10.24.1"
+	const appName = "hsm-api"
+
 	cf := codefresh.New(&codefresh.ClientOptions{
 		Host:  host,
 		Token: "67e3205a84626b4ad9fdc529.72fd6d8b4cd15c76d2e5f1e6b8be6e7a",
@@ -19,13 +23,12 @@ func main() {
 	pipeAPI := api.Pipeline()
 	pipelines, err := pipeAPI.List(map[string]string{
 		"limit": "40",
-		"id":    "hsm-api/deployment-api-",
+		"id":    fmt.Sprintf("%s/deployment-api-", appName),
 	})
 	if err != nil {
 		log.Panic("Failed to list pipelines: ", err)
 	}
 
-	const tag = "10.24.1"
 	pipelines = lo.Filter(pipelines, func(p rest.Pipeline, index int) bool {
 		envName, _ := strings.CutPrefix(p.Metadata.Name, "hsm-api/deployment-api-")
 		env := Environment(envName)
@@ -41,8 +44,27 @@ func main() {
 		// if err != nil {
 		// 	log.Panic("Failed to list pipelines: ", err)
 		// }
-		// link := fmt.Sprintf("%s/build/%s", host, buildId)
-		link := "dont"
-		log.Printf("Started %s: %s", p.Metadata.Name, link)
+		// cfLink := fmt.Sprintf("%s/build/%s", host, buildId)
+
+		cfLink := "didn't start"
+		vars := lo.SliceToMap(p.Spec.Variables, func(item CFVariable) (string, string) {
+			return item.Key, item.Value
+		})
+		// pretty.Println(p)
+		fmt.Printf("Started %s: %s\n", p.Metadata.Name, cfLink)
+		if vars["REGION_PRIMARY_ENABLED"] == "true" {
+			argoLink := fmt.Sprintf("https://argocd.pismo.services/applications/%s", vars["REGION_PRIMARY_FULL_NAME"])
+			fmt.Println("->", argoLink)
+		}
+		if vars["REGION_SECONDARY_ENABLED"] == "true" {
+			argoLink := fmt.Sprintf("https://argocd.pismo.services/applications/%s", vars["REGION_SECONDARY_FULL_NAME"])
+			fmt.Println("->", argoLink)
+		}
+
 	}
+}
+
+type CFVariable = struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
