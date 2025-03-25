@@ -17,5 +17,13 @@
             "program": "${workspaceFolder}/brute_force_decimalization_table",
             "args": []
         },
+        {
+            "name": "codefresh",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/codefresh",
+            "args": []
+        },
     ]
 }
