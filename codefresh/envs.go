@@ -52,6 +52,10 @@ func (e Environment) IsProduction() bool {
 	}
 }
 
+func (e Environment) Is(other Environment) bool {
+	return e.NonPCI() == other.NonPCI()
+}
+
 func (e Environment) IsValid() bool {
 	nosuffix, _ := strings.CutSuffix(string(e), "-pci")
 	return slices.Contains(ProductionEnvironments(), Environment(nosuffix))

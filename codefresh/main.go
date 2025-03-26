@@ -32,7 +32,8 @@ func main() {
 	pipelines = lo.Filter(pipelines, func(p rest.Pipeline, index int) bool {
 		envName, _ := strings.CutPrefix(p.Metadata.Name, "hsm-api/deployment-api-")
 		env := Environment(envName)
-		return env.IsValid() && env.IsProduction() && !env.IsMajor()
+		// return env.IsValid() && env.IsProduction() && !env.IsMajor()
+		return env.Is(India)
 	})
 	for _, p := range pipelines {
 		// buildId, err := pipeAPI.Run(p.Metadata.Name, &rest.RunOptions{
@@ -54,11 +55,11 @@ func main() {
 		fmt.Printf("Started %s: %s\n", p.Metadata.Name, cfLink)
 		if vars["REGION_PRIMARY_ENABLED"] == "true" {
 			argoLink := fmt.Sprintf("https://argocd.pismo.services/applications/%s", vars["REGION_PRIMARY_FULL_NAME"])
-			fmt.Println("->", argoLink)
+			fmt.Println("-> Primary Region ", argoLink)
 		}
 		if vars["REGION_SECONDARY_ENABLED"] == "true" {
 			argoLink := fmt.Sprintf("https://argocd.pismo.services/applications/%s", vars["REGION_SECONDARY_FULL_NAME"])
-			fmt.Println("->", argoLink)
+			fmt.Println("-> Secondary Region ", argoLink)
 		}
 
 	}
