@@ -9,7 +9,7 @@ replace github.com/mniak/hsmlib => ../hsmlib
 require (
 	github.com/codefresh-io/go-sdk v1.4.7
 	github.com/mniak/krypton v0.0.4
-	github.com/samber/lo v1.38.1
+	github.com/samber/lo v1.49.1
 )
 
 require (
@@ -17,7 +17,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
+	golang.org/x/text v0.21.0 // indirect
 )
 
 replace github.com/mniak/krypton => ../krypton
