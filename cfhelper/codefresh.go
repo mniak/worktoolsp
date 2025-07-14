@@ -8,9 +8,11 @@ import (
 
 func NewCodefreshClient() codefresh.Codefresh {
 	const host = "https://g.codefresh.io"
+	token := os.Getenv("CODEFRESH_TOKEN")
+
 	cf := codefresh.New(&codefresh.ClientOptions{
 		Host:  host,
-		Token: os.Getenv("CODEFRESH_TOKEN"),
+		Token: token,
 	})
 	return cf
 }

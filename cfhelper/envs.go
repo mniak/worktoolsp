@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 
@@ -9,31 +10,35 @@ import (
 
 type Environment string
 
-func GetEnv(nickname string) Environment {
+func ParseEnv(nickname string) (Environment, error) {
 	nickname = strings.ToLower(strings.TrimSpace(nickname))
 	switch nickname {
 	case "abn", "abnamro":
-		return ABN
+		return ABN, nil
 	case "aus", "australia":
-		return Australia
+		return Australia, nil
 	case "bra02", "brazil2", "bra2":
-		return Brazil2
+		return Brazil2, nil
 	case "ind", "india":
-		return India
+		return India, nil
 	case "irl", "ireland", "irlanda":
-		return Ireland
+		return Ireland, nil
 	case "itau", "itaú":
-		return Itau
+		return Itau, nil
 	case "nequi":
-		return Nequi
+		return Nequi, nil
 	case "prod", "prod-mt", "mt", "multitenant":
-		return Prod
+		return Prod, nil
 	case "usa", "us":
-		return USA
+		return USA, nil
 	case "ext", "sandbox", "dev", "development":
-		return EXT
+		return EXT, nil
 	default:
-		return Environment(nickname)
+		result := Environment(nickname)
+		if !result.IsValid() {
+			return "", fmt.Errorf("unknown environment: %s", nickname)
+		}
+		return result, nil
 	}
 }
 

@@ -18,12 +18,17 @@
             "args": []
         },
         {
-            "name": "codefresh",
+            "name": "cfhelper",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/codefresh",
-            "args": []
+            "program": "${workspaceFolder}/cfhelper",
+            "args": [
+                "deploy",
+                "hsm",
+                "--tag", "11.6.0",
+                "ext",
+            ]
         },
     ]
 }
