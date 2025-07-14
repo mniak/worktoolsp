@@ -9,6 +9,34 @@ import (
 
 type Environment string
 
+func GetEnv(nickname string) Environment {
+	nickname = strings.ToLower(strings.TrimSpace(nickname))
+	switch nickname {
+	case "abn", "abnamro":
+		return ABN
+	case "aus", "australia":
+		return Australia
+	case "bra02", "brazil2", "bra2":
+		return Brazil2
+	case "ind", "india":
+		return India
+	case "irl", "ireland", "irlanda":
+		return Ireland
+	case "itau", "itaú":
+		return Itau
+	case "nequi":
+		return Nequi
+	case "prod", "prod-mt", "mt", "multitenant":
+		return Prod
+	case "usa", "us":
+		return USA
+	case "ext", "sandbox", "dev", "development":
+		return EXT
+	default:
+		return Environment(nickname)
+	}
+}
+
 const (
 	ABN       Environment = "abnamro-prod"
 	Australia Environment = "aus-prod"
