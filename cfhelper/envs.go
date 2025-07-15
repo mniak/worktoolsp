@@ -103,6 +103,15 @@ func (e Environment) IsValid() bool {
 	return slices.Contains(ProductionEnvironments(), Environment(nosuffix))
 }
 
+func (e Environment) TerraformName() string {
+	switch e {
+	case EXT:
+		return "development-pci"
+	default:
+		return string(e)
+	}
+}
+
 func AllEnvironments() []Environment {
 	return []Environment{
 		ABN,
