@@ -60,11 +60,11 @@ func main() {
 			result, err := pipelineAPI.Run(p.Metadata.ID, &rest.RunOptions{
 				Variables: map[string]string{
 					"TAG":          flagGitTag,
-					"GIT_REVISION": flagGitTag,
+					"GIT_REVISION": lo.If(env.Is(Investec), "main").Else(flagGitTag),
 				},
 			})
 			handleErr(err, "Failed to start pipeline")
-			fmt.Printf("Started %s: %s\n", p.Metadata.Name, result)
+			fmt.Printf("Started %s: %s\n", p.Metadata.Name, cf.BuildRunURL(result))
 
 			vars := lo.SliceToMap(p.Spec.Variables, func(v CFVariable) (string, string) {
 				return v.Key, v.Value

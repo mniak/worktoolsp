@@ -21,6 +21,8 @@ func ParseEnv(nickname string) (Environment, error) {
 		return Brazil2, nil
 	case "ind", "india":
 		return India, nil
+	case "investec":
+		return Investec, nil
 	case "irl", "ireland", "irlanda":
 		return Ireland, nil
 	case "itau", "itaú":
@@ -31,8 +33,12 @@ func ParseEnv(nickname string) (Environment, error) {
 		return Prod, nil
 	case "usa", "us":
 		return USA, nil
+
 	case "ext", "sandbox", "dev", "development":
 		return EXT, nil
+
+	case "integration", "integ":
+		return Integration, nil
 	default:
 		result := Environment(nickname)
 		if !result.IsValid() {
@@ -47,12 +53,15 @@ const (
 	Australia Environment = "aus-prod"
 	Brazil2   Environment = "bra02-prod"
 	India     Environment = "ind-prod"
+	Investec  Environment = "investec-prd"
 	Ireland   Environment = "irl-prod"
 	Itau      Environment = "itau"
 	Nequi     Environment = "nequi-prod"
 	Prod      Environment = "prod"
 	USA       Environment = "usa-prod"
-	EXT       Environment = "dev-ext"
+
+	EXT         Environment = "dev-ext"
+	Integration Environment = "integ"
 )
 
 func (e Environment) NonPCI() string {

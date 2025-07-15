@@ -1,18 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/codefresh-io/go-sdk/pkg/codefresh"
 )
 
-func NewCodefreshClient() codefresh.Codefresh {
-	const host = "https://g.codefresh.io"
+type CodefreshClient struct {
+	codefresh.Codefresh
+}
+
+const _CodefreshHost = "https://g.codefresh.io"
+
+func NewCodefreshClient() *CodefreshClient {
 	token := os.Getenv("CODEFRESH_TOKEN")
 
 	cf := codefresh.New(&codefresh.ClientOptions{
-		Host:  host,
+		Host:  _CodefreshHost,
 		Token: token,
 	})
-	return cf
+	return &CodefreshClient{cf}
+}
+
+func (*CodefreshClient) BuildRunURL(runID string) string {
+	return fmt.Sprintf("%s/build/%s", _CodefreshHost, runID)
 }
