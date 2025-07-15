@@ -87,7 +87,7 @@ func (e Environment) IsMajor() bool {
 
 func (e Environment) IsProduction() bool {
 	switch e.NonPCI() {
-	case string(EXT):
+	case string(EXT), string(Integration):
 		return false
 	default:
 		return true
@@ -110,11 +110,13 @@ func AllEnvironments() []Environment {
 		Brazil2,
 		India,
 		Ireland,
+		Investec,
 		Itau,
 		Nequi,
 		Prod,
 		USA,
 		EXT,
+		Integration,
 	}
 }
 
